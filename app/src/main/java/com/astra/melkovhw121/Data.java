@@ -74,7 +74,10 @@ public class Data {
         return result.toString();
     }
 
-    /* Checks if external storage is available for read and write */
+    /**
+     * Checks if external storage is available for read and write
+     * @return flag: storage ready to write
+     */
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -83,7 +86,10 @@ public class Data {
         return false;
     }
 
-    /* Checks if external storage is available to at least read */
+    /**
+     * Checks if external storage is available to at least read
+     * @return flag: storage ready to read
+     */
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
