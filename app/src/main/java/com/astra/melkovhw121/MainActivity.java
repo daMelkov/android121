@@ -1,12 +1,16 @@
 package com.astra.melkovhw121;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        // init data in private external storage
+        // init data in private external storage (in first run)
         Data.writeToPrivateExternalStorage(
                 MainActivity.this,
                 "data.txt",
@@ -47,22 +51,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        List<String> samples = getData();
-
-        ArrayAdapter<String> adapter = new ArrayAdapter(this,
+        // ArrayAdapter
+        final List<String> samples = getDataFromExternalStorage();
+        final ArrayAdapter<String> adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, samples);
 
+        // ListView
         ListView list = findViewById(R.id.list);
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // remove from list
+                samples.remove(position);
+
+                // remove from private external file
+                setDataToExternalStorage(samples);
+
+                // update
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    private List<String> getData() {
+    private void setDataToExternalStorage(List<String> samples) {
+        StringBuilder newData = new StringBuilder();
+        for (String item : samples) {
+           newData.append(item).append(";");
+        }
+
+        Data.writeToPrivateExternalStorage(
+                MainActivity.this,
+                "data.txt",
+                newData.toString(),
+                true
+        );
+    }
+
+    private List<String> getDataFromExternalStorage() {
         String samples = Data.readFromPrivateExternalStorage(
                 MainActivity.this,
                 "data.txt"
         );
 
-        List<String> result = new ArrayList<>(Arrays.asList(samples.split(";")));
+        List<String> result = new ArrayList<>();
+
+        // avoid empty elements (between ';' after deleting)
+        for (String data: Arrays.asList(samples.split(";"))) {
+            if(data.length() != 0) {
+                result.add(data);
+            }
+        }
         return result;
     }
 

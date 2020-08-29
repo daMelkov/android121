@@ -19,6 +19,7 @@ public class Data {
     public static void writeToPrivateExternalStorage(Context context, String fileName, String content, boolean overwrite) {
         if (isExternalStorageWritable()) {
             File file = new File(context.getExternalFilesDir(null), fileName);
+            // init only in first time
             if(!overwrite && file.exists()) {
                 return;
             }
@@ -53,13 +54,12 @@ public class Data {
             try {
                 File file = new File(context.getExternalFilesDir(null), fileName);
                 reader = new FileReader(file);
-                char[] charArray = new char[100];
+                char[] charArray = new char[1024];
                 reader.read(charArray);
 
                 for(char character: charArray){
                     result.append(character);
                 }
-                reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
