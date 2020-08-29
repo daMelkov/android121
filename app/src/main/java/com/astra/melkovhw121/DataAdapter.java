@@ -5,8 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public class FileAdapter extends BaseAdapter {
-    public FileAdapter(Context context, List<Data> ) {
+import java.util.List;
+
+public class DataAdapter extends BaseAdapter {
+    public DataAdapter(Context context, List<Article> data) {
     }
 
     @Override

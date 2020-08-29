@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MelkovHw121</string>
+    <string name="delete">Удалить</string>
+    <string name="samples">
+        Material is the metaphor;Bold, graphic, intentional;Motion provides meaning;3D world;Light and shadow;
+        Resting elevation;Component elevations;Responsive elevation and dynamic elevation offsets;
+        Avoiding elevation interference
+    </string>
 </resources>
