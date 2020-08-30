@@ -2,11 +2,14 @@ package com.astra.melkovhw121;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Data {
     /**
@@ -51,20 +54,24 @@ public class Data {
 
         if (isExternalStorageReadable()) {
             FileReader reader = null;
+            BufferedReader bufferedReader = null;
             try {
                 File file = new File(context.getExternalFilesDir(null), fileName);
                 reader = new FileReader(file);
-                char[] charArray = new char[1024];
-                reader.read(charArray);
+                bufferedReader = new BufferedReader(reader);
 
-                for(char character: charArray){
-                    result.append(character);
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    result.append(line);
+                    line = bufferedReader.readLine();
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 try {
                     reader.close();
+                    bufferedReader.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
